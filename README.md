@@ -4,7 +4,7 @@ This is the implementation of the audio super-resolution model proposed in Towar
 !pip install https://github.com/schmiph2/pysepm/archive/master.zip
 
 ### Network
-`Parameters: 10281363`
+`Parameters: 10281363` `Kernel size = 11`
 ```
 D-Block:  (None, None, 64)
 D-Block:  (None, None, 64)
@@ -24,7 +24,6 @@ U-Block:  (None, None, 128)
 U-Block:  (None, None, 128)
 U-Block:  (None, None, 128)
 ```
-`Kernel size = 11`
 
 ### Dataset
 10% Corpus: TIMIT, VCTKS, VCTKM, WSJ, LIBRI, IEEE, and Mixed.
@@ -145,8 +144,9 @@ Fig3.Discard
     src="https://user-images.githubusercontent.com/44235744/189385130-7ba1448b-e704-4c61-a24d-3753e7736bec.png">
 </center>
 
-- (9)Apply dequeue to achieve early stopping descripted in 4.
+- (9)Apply dequeue to achieve early stopping descripted.
 - (10)Write the logdir and csv records in the same path to check quickly.
+
 Slight changes in script , which works as follows.
 
 ``` 
@@ -188,7 +188,7 @@ delete original arguments:
 set in code:
 if args.model == 'proposed':
   opt_params = {'loss_func':args.loss_func, 'alg': 'adam', 'lr': 0.0003, 
-'b1': 0.9, 'b2': 0.999, 'batch_size': 32, 'layers': 8}
+                'b1': 0.9, 'b2': 0.999, 'batch_size': 32, 'layers': 8}
 ``` 
 
 #### Testing the model
