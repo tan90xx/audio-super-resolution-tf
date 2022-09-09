@@ -126,6 +126,7 @@ Y = tf.reshape(Y, (-1, 512, 1))
 - (8)Apply OLA(overlap and add). 
 We also pay attention to the articulation of each two wav files, which is not continuous. Some frames between them have been discarded to avoid vertical stripes in spectrogram. Actually I don’t know where to use OLA, just put it in the calculation of LSD and PESQ.
 
+Fig1.Flat
 <center>
     <img style="border-radius: 0.3125em;
     box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
