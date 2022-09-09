@@ -130,20 +130,21 @@ Fig1.Flat
 <center>
     <img style="border-radius: 0.3125em;
     box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
-    src="https://user-images.githubusercontent.com/44235744/189385109-af53b752-b293-4a30-b8ce-6a9e9a2e37ab.png">
+    src="https://user-images.githubusercontent.com/44235744/189385562-6f7a2bcc-5940-45be-8157-9a2ae282088f.png">
 </center>
 Fig2.OLA
 <center>
     <img style="border-radius: 0.3125em;
     box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
-    src="https://user-images.githubusercontent.com/44235744/189385130-7ba1448b-e704-4c61-a24d-3753e7736bec.png">
+    src="https://user-images.githubusercontent.com/44235744/189385109-af53b752-b293-4a30-b8ce-6a9e9a2e37ab.png">
 </center>
 Fig3.Discard
 <center>
     <img style="border-radius: 0.3125em;
     box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
-    src="https://user-images.githubusercontent.com/44235744/189385562-6f7a2bcc-5940-45be-8157-9a2ae282088f.png">
+    src="https://user-images.githubusercontent.com/44235744/189385130-7ba1448b-e704-4c61-a24d-3753e7736bec.png">
 </center>
+
 - (9)Apply dequeue to achieve early stopping descripted in 4.
 - (10)Write the logdir and csv records in the same path to check quickly.
 Slight changes in script , which works as follows.
