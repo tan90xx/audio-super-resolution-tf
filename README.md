@@ -1,9 +1,9 @@
 # audio-super-resolution-tf2.4.1
 This is the implementation of the audio super-resolution model proposed in Towards Robust Speech Super-Resolution with no baselines, only the proposed model.
-## Environment
+### Environment
 !pip install https://github.com/schmiph2/pysepm/archive/master.zip
 
-## Network
+### Network
 `Parameters: 10281363`
 ```
 D-Block:  (None, None, 64)
@@ -26,18 +26,18 @@ U-Block:  (None, None, 128)
 ```
 `Kernel size = 11`
 
-## Dataset
+### Dataset
 10% Corpus: TIMIT, VCTKS, VCTKM, WSJ, LIBRI, IEEE, and Mixed.
 
-## Hyperparameter
+### Hyperparameter
 Dropout rate = 0.2, Optimization = Adam, Learning rate = 0.0003 is halved if the loss has not improved for 3 consecutive epochs on the validation set. Early stop if the validation loss has not improved for 6 successive epochs.
 
-## Result
+### Result
 Notcomplete
 
-## Note
+### Note
 The code is adopted from https://github.com/kuleshov/audio-super-res, and here are some details of changes:
-### Setup
+#### Setup
 - (1)Set the random seeds and generate txts for train, valid, and test with the path of audio files for each corpus, to repeat this experiments exactly as much as possible.
 - (2)Apply MVN and silence filter in datasets preparation, for the reason the author observe that MVN improves cross-corpus generalization, and a silence filter is performed to stabilize training and ensure faster convergence. 
 - (3)Extend down-sample schemes in datasets preparation, which used to be only the SciPy decimate function. In summary, the preprocess is like this:
@@ -88,7 +88,7 @@ delete original arguments:
   --out vctk-speaker1-decimating-train.2.2048.1024.h5 \
 ```  
 
-### Running the model
+#### Running the model
 - (5)Make it run. 
 
 ``` 
@@ -189,7 +189,7 @@ if args.model == 'proposed':
 'b1': 0.9, 'b2': 0.999, 'batch_size': 32, 'layers': 8}
 ``` 
 
-### Testing the model
+#### Testing the model
 - (11)Design output path same with logdir and csv. 
 - (12)Auto-calculate metrics.
 - (13)Define visualization functions. Spectrogram  Training process
