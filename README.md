@@ -5,24 +5,25 @@ This is the implementation of the audio super-resolution model proposed in Towar
 
 ### Network
 `Parameters: 10281363`
-`D-Block:  (None, None, 64)`
-`D-Block:  (None, None, 64)`
-`D-Block:  (None, None, 64)`
-`D-Block:  (None, None, 128)`
-`D-Block:  (None, None, 128)`
-`D-Block:  (None, None, 128)`
-`D-Block:  (None, None, 256)`
-`D-Block:  (None, None, 256)`
-`B-Block:  (None, None, 256)`
-`U-Block:  (None, None, 512)`
-`U-Block:  (None, None, 512)`
-`U-Block:  (None, None, 256)`
-`U-Block:  (None, None, 256)`
-`U-Block:  (None, None, 256)`
-`U-Block:  (None, None, 128)`
-`U-Block:  (None, None, 128)`
-`U-Block:  (None, None, 128)`
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+```
+D-Block:  (None, None, 64)
+D-Block:  (None, None, 64)
+D-Block:  (None, None, 64)
+D-Block:  (None, None, 128)
+D-Block:  (None, None, 128)
+D-Block:  (None, None, 128)
+D-Block:  (None, None, 256)
+D-Block:  (None, None, 256)
+B-Block:  (None, None, 256)
+U-Block:  (None, None, 512)
+U-Block:  (None, None, 512)
+U-Block:  (None, None, 256)
+U-Block:  (None, None, 256)
+U-Block:  (None, None, 256)
+U-Block:  (None, None, 128)
+U-Block:  (None, None, 128)
+U-Block:  (None, None, 128)
+```
 `Kernel size = 11`
 
 ### Dataset
