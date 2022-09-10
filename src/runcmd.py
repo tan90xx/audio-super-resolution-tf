@@ -1,0 +1,15 @@
+import os
+###############################timit###################################
+#os.system("python run.py train -e 10 --model proposed --loss_func MAE --logname proposed.vctk1 --train '../data/vctk-speaker1-train.2.2048.1024.h5' --val '../data/vctk-speaker1-val.2.2048.1024.h5'")
+#os.system("python run.py train -e 10 --model proposed --loss_func L2 --logname proposed.vctk1 --train '../data/vctk-speaker1-train.2.2048.1024.h5' --val '../data/vctk-speaker1-val.2.2048.1024.h5'")
+os.system("python run.py train -e 10 --model proposed --loss_func T_PCM --logname proposed.vctk1 --train '../data/vctk-speaker1-train.2.2048.1024.h5' --val '../data/vctk-speaker1-val.2.2048.1024.h5'")
+os.system("python run.py train -e 10 --model audiounet --loss_func T_PCM --logname audiounet.vctk1 --train '../data/vctk-speaker1-train.2.2048.1024.h5' --val '../data/vctk-speaker1-val.2.2048.1024.h5'")
+#os.system("python run.py train -e 10 --model audiounet --loss_func L2 --logname audiounet.vctk1 --train '../data/vctk-speaker1-train.2.2048.1024.h5' --val '../data/vctk-speaker1-val.2.2048.1024.h5'")
+#os.system("python run.py train --model proposed --loss_func MAE --logname proposed.timit")
+#os.system("python run.py train --model proposed --loss_func MSE --logname proposed.timit")
+#os.system("python run.py train --model proposed --loss_func F --logname proposed.timit")
+#os.system("python run.py train --model proposed --loss_func RI --logname proposed.timit")
+#os.system("python run.py train --model proposed --loss_func TF --logname proposed.timit")
+#os.system("python run.py train --model proposed --loss_func RI_MAG --logname proposed.timit")
+#os.system("python run.py train --model proposed --loss_func PCM --logname proposed.timit")
+#os.system("python run.py train --model proposed --loss_func T_PCM --logname proposed.timit")
