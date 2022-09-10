@@ -36,6 +36,7 @@ Dropout rate = 0.2, Optimization = Adam, Learning rate = 0.0003 is halved if the
 
 ### Result
 Notcomplete
+Audio samples: https://tan90xx.github.io/SR-display.github.io/
 
 ### Note
 The code is adopted from https://github.com/kuleshov/audio-super-res, and here are some details of changes:
