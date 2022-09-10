@@ -1,0 +1,8 @@
+{
+     "6": {"corpus": "libri"},
+     "7": {"corpus": "ieee"},
+     "8": {"corpus": "mixed"},
+     "9": {"corpus": "timit", "low_pass": "subsampling"},
+     "10": {"corpus": "timit", "low_pass": "fft"},
+     "11": {"corpus": "timit", "low_pass": "random"}
+}
