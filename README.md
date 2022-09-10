@@ -1,5 +1,8 @@
 # audio-super-resolution-tf2.4.1
-This is an UNOFFICIAL implementation of the audio super-resolution model proposed in Towards Robust Speech Super-Resolution with no baselines, only the proposed model.
+This is an UNOFFICIAL implementation of the audio super-resolution model proposed in 
+**H. Wang and D. Wang, "Towards Robust Speech Super-Resolution"** 
+with no baselines, only the proposed model.
+
 ### Environment
 !pip install https://github.com/schmiph2/pysepm/archive/master.zip
 
