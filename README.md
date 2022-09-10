@@ -147,8 +147,8 @@ Fig3.Discard
     src="https://user-images.githubusercontent.com/44235744/189385130-7ba1448b-e704-4c61-a24d-3753e7736bec.png">
 </center>
 
-- (9)Apply dequeue to achieve early stopping descripted.
-- (10)Write the logdir and csv records in the same path to check quickly.
+- (9)Apply dequeue to monitor val_loss and achieve early stopping ect.
+- (10)Write the logdir and csv records in the same path for quick check.
 
 Slight changes in script , which works as follows.
 
