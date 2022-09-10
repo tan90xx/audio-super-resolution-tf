@@ -198,7 +198,7 @@ if args.model == 'proposed':
 #### Testing the model
 - (11)Design the output path of eval files same with logdir and csv. 
 - (12)Auto-calculate metrics.
-- (13)Define visualization functions. Spectrogram  Training process
+- (13)Define visualization functions to display Spectrogram and Training process
 - (14)Build a web page [[code]](https://github.com/tan90xx/tan90xx.github.io/tree/main/SR-display.github.io).
 
 Slight changes in script , which works as follows.
