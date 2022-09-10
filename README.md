@@ -199,7 +199,7 @@ if args.model == 'proposed':
 - (11)Design output path same with logdir and csv. 
 - (12)Auto-calculate metrics.
 - (13)Define visualization functions. Spectrogram  Training process
-- (14)Build a web page. Audio catogories
+- (14)Build a web page [[code]](https://github.com/tan90xx/tan90xx.github.io/tree/main/SR-display.github.io).
 
 Slight changes in script , which works as follows.
 ``` 
