@@ -117,7 +117,7 @@ if l%3 == 2:
 ![image](https://user-images.githubusercontent.com/44235744/189524252-b1a8a0ce-616f-46ec-b8f5-877dfb99df1a.png)
 Fig from P2060
 - (7)Self-define loss function. 
-We apply the overlap and add(OLA) method when calculating the loss within each segment. Framed segments are first divided into frames of 512 samples with a frame shift of 256 samples. Then we multiply these frames with a Hamming window.
+(OLA)"Framed segments are first divided into frames of 512 samples with a frame shift of 256 samples. Then we multiply these frames with a Hamming window."
 
 ``` 
 # frame:
