@@ -104,17 +104,18 @@ delete original arguments:
 # initialize_all_variables-->global_variables_initializer
 ``` 
 
-- (6)Build structure of the proposed model, adopted from audiounet.
+- (6)Build structure of the proposed model, adopted from audiounet. And exactly follow the sequence of Conv-->Relu-->Dropout
 
 ``` 
 # set:
 n_filters = [64, 64, 64, 128, 128, 128, 256, 256]
 n_filtersizes = [11, 11, 11, 11, 11, 11, 11, 11, 11]
-x = LeakyReLU(0.2)(x)-->x = PReLU(shared_axes=[1, 2])(x)
+x = LeakyReLU(0.2)(x)-->x = PReLU(shared_axes=[1])(x)
 # add dropout in U and D blocks:
 if l%3 == 2:
   x = Dropout(rate=0.2)(x)
 ``` 
+![image](https://user-images.githubusercontent.com/44235744/189524252-b1a8a0ce-616f-46ec-b8f5-877dfb99df1a.png)
 
 - (7)Self-define loss function. 
 We apply the overlap and add(OLA) method when calculating the loss within each segment. Framed segments are first divided into frames of 512 samples with a frame shift of 256 samples. Then we multiply these frames with a Hamming window.
