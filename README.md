@@ -120,14 +120,15 @@ Fig from P2060
 (OLA)"Framed segments are first divided into frames of 512 samples with a frame shift of 256 samples. Then we multiply these frames with a Hamming window."
 
 ``` 
-# frame:
-Y = tf.signal.frame(y_flat,512,256)
-Y = tf.reshape(Y, (-1, 512, 1))
-# tf.fft default window is hamming window
+# ola output[batch, length]
+x_ola = tf.signal.overlap_and_add(X, 1024)
+x_ola = tf.cast(x_ola, tf.float32)
+X_spec = tf.signal.stft(signals=x_ola, frame_length=FRAME, frame_step=SHIFT, fft_length=FRAME,
+                        window_fn=tf.signal.hamming_window)
 ``` 
 
 - (8)Apply OLA(overlap and add). 
-We also pay attention to the articulation of each two wav files, which is not continuous. Some frames between them have been discarded to avoid vertical stripes in spectrogram. Actually I don’t know where to use OLA, just put it in the calculation of LSD and PESQ.
+Also pay attention to the articulation of each two wav files, which is not continuous. Some frames between them have been discarded to avoid vertical stripes in spectrogram. This easy numpy version can be put to calculate LSD and PESQ.
 
 Fig1.Flat
 <center>
