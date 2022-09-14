@@ -210,7 +210,8 @@ optional arguments:
 --out-label 
 --wav-file-list 
 --r R                 
---sr SR            
+--sr SR          
+--ola false
 
 example:
 python run.py eval \
