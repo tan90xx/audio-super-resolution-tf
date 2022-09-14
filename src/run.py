@@ -76,6 +76,7 @@ def make_parser():
   eval_parser.add_argument('--r', help='upscaling factor', default = 2, type=int)
   eval_parser.add_argument('--sr', help='high-res sampling rate',
                                    type=int, default=16000)
+  eval_parser.add_argument('--ola', default='false', choices=('true', 'false'))
   eval_parser.add_argument('--grocery', default='false', choices=('true', 'false'))
   eval_parser.add_argument('--model', default='proposed',
     choices=('proposed', 'audiounet', 'audiotfilm', 'dnn', 'spline'),
@@ -165,7 +166,7 @@ def get_model(args, n_dim, r, from_ckpt=False, train=True, grocery='false'):
   if args.model == 'proposed':
     opt_params = {'loss_func':args.loss_func, 'alg': 'adam', 'lr': 0.0003, 'b1': 0.9, 'b2': 0.999, 'batch_size': 32, 'layers': 8}
   else:
-    opt_params = {'loss_func':args.loss_func, 'alg': 'adam', 'lr': 3e-4, 'b1': 0.9, 'b2': 0.999, 'batch_size': 64, 'layers': 4}
+    opt_params = {'loss_func':args.loss_func, 'alg': 'adam', 'lr': 0.0003, 'b1': 0.9, 'b2': 0.999, 'batch_size': 64, 'layers': 4}
   print((args.model))
 
   if args.model == 'proposed':
