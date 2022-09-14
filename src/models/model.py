@@ -11,12 +11,11 @@ from .dataset import DataSet
 from tqdm import tqdm
 
 # ttyadd: lib
-from .loss import ops
-from pysepm import pesq
+#from pysepm import pesq
 #import soundfile as sf
 from collections import deque
 import csv
-
+from tensorflow.python.ops import array_ops
 # ----------------------------------------------------------------------------
 # Warning:
 # initialize_all_variables-->global_variables_initializer
@@ -125,25 +124,87 @@ class Model(object):
     def create_model(self, n_dim, r):
         raise NotImplementedError()
 
+
     def create_objective(self, X, Y, opt_params):
         # load model output and true output
         P = self.predictions
 
-        # compute l2 loss
-        sqrt_l2_loss = tf.sqrt(tf.reduce_mean(input_tensor=(P-Y)**2 + 1e-6, axis=[1, 2]))
-        #sqrn_l2_norm = tf.sqrt(tf.reduce_mean(input_tensor=Y**2, axis=[1, 2]))
-        #snr = 20 * tf.math.log(sqrn_l2_norm / sqrt_l2_loss + 1e-8) / tf.math.log(10.)
+        if opt_params['loss_func'] == 'L2':
+            # compute l2 loss
+            sqrt_l2_loss = tf.sqrt(tf.reduce_mean(input_tensor=(P-Y)**2 + 1e-6, axis=[1, 2]))
+            # sqrn_l2_norm = tf.sqrt(tf.reduce_mean(input_tensor=Y**2, axis=[1, 2]))
+            # snr = 20 * tf.math.log(sqrn_l2_norm / sqrt_l2_loss + 1e-8) / tf.math.log(10.)
+            avg_l2_loss = tf.reduce_mean(input_tensor=sqrt_l2_loss, axis=0)
+            LOSS = avg_l2_loss
+            # avg_snr = tf.reduce_mean(input_tensor=snr, axis=0)
+        else:
+            ############################################################################################
+            # ola output[batch, length]
+            x_ola = tf.signal.overlap_and_add(X, 1024)
+            x_ola = tf.cast(x_ola, tf.float32)
+            y_ola = tf.signal.overlap_and_add(Y, 1024)
+            y_ola = tf.cast(y_ola, tf.float32)
+            p_ola = tf.signal.overlap_and_add(P, 1024)
+            p_ola = tf.cast(p_ola, tf.float32)
+            # compute LT###############################################################################
+            LT = tf.reduce_mean(input_tensor=tf.abs(p_ola - y_ola), axis=1)
+            # conpute LF###############################################################################
+            X_spec = tf.signal.stft(signals=x_ola, frame_length=512, frame_step=256, fft_length=512,
+                                    window_fn=tf.signal.hamming_window)
+            X_mag_spec = tf.abs(X_spec)
+            Y_spec = tf.signal.stft(signals=y_ola, frame_length=512, frame_step=256, fft_length=512,
+                                    window_fn=tf.signal.hamming_window)
+            Y_mag_spec = tf.abs(Y_spec)
+            Y_sub_spec = tf.abs(Y_spec - X_spec)
+            P_spec = tf.signal.stft(signals=p_ola, frame_length=512, frame_step=256, fft_length=512,
+                                    window_fn=tf.signal.hamming_window)
+            P_mag_spec = tf.abs(P_spec)
+            P_sub_spec = tf.abs(P_spec - X_spec)
+            LF = tf.reduce_mean(tf.reduce_mean(input_tensor=tf.abs(P_mag_spec - Y_mag_spec), axis=2), axis=1)
+            # conpute LPCM###############################################################################
+            LsubF = tf.reduce_mean(tf.reduce_mean(input_tensor=tf.abs(P_sub_spec - Y_sub_spec), axis=2), axis=1)
 
-        avg_sqrt_l2_loss = tf.reduce_mean(input_tensor=sqrt_l2_loss, axis=0)
-        #avg_snr = tf.reduce_mean(input_tensor=snr, axis=0)
+            # compute average at each batch
+            avg_LT = tf.reduce_mean(input_tensor=LT, axis=0)
+            avg_LF = tf.reduce_mean(input_tensor=LF, axis=0)
+            avg_LPCM = avg_LF + tf.reduce_mean(input_tensor=LsubF, axis=0)
+            ############################################################################################
+            if opt_params['loss_func'] == 'MAE':
+                LOSS = avg_LT
+            elif opt_params['loss_func'] == 'MSE':
+                LT_square = tf.reduce_mean(input_tensor=tf.abs(p_ola - y_ola)**2, axis=1)
+                LOSS = tf.reduce_mean(input_tensor=LT_square, axis=0)
+            elif opt_params['loss_func'] == 'F':
+                LOSS = avg_LF
+            elif opt_params['loss_func'] == 'RI':
+                Y_real_spec = tf.math.real(Y_spec)
+                P_real_spec = tf.math.real(P_spec)
+                Y_imag_spec = tf.math.imag(Y_spec)
+                P_imag_spec = tf.math.imag(P_spec)
+                LRI = tf.reduce_mean(input_tensor=tf.abs(P_real_spec-Y_real_spec)+tf.abs(P_imag_spec-Y_imag_spec), axis=1)
+                avg_LRI = tf.reduce_mean(input_tensor=LRI, axis=0)
+                LOSS = avg_LRI
+            elif opt_params['loss_func'] == 'TF':
+                LOSS = 0.85*avg_LT + 0.15*avg_LF
+            elif opt_params['loss_func'] == 'RI_MAG':
+                Y_real_spec = tf.math.real(Y_spec)
+                P_real_spec = tf.math.real(P_spec)
+                Y_imag_spec = tf.math.imag(Y_spec)
+                P_imag_spec = tf.math.imag(P_spec)
+                LRI = tf.reduce_mean(input_tensor=tf.abs(P_real_spec-Y_real_spec)+tf.abs(P_imag_spec-Y_imag_spec), axis=1)
+                avg_LRI = tf.reduce_mean(input_tensor=LRI, axis=0)
+                LOSS = avg_LF + avg_LRI
+            elif opt_params['loss_func'] == 'PCM':
+                LOSS = avg_LPCM
+            else:
+                avg_LTPCM = 0.6 * avg_LT + 0.4 * avg_LPCM
+                LOSS = avg_LTPCM
 
-        # ttyadd: compute lsd
-        y_flat = tf.reshape(Y, [-1])
-        p_flat = tf.reshape(P, [-1])
-        Y = tf.reshape(y_flat, (-1,2048,1))
-        P = tf.reshape(p_flat, (-1,2048,1))
-        avg_lsd = ops.lsd_loss(Y, P)
-        avg_snr = ops.snr_loss(Y, P)
+        # track losses
+        tf.compat.v1.summary.scalar('loss', LOSS)
+
+        # save losses into collection
+        tf.compat.v1.add_to_collection('losses', LOSS)
 
         # save predicted and real outputs to collection
         y_flat = tf.reshape(Y, [-1])
@@ -151,48 +212,7 @@ class Model(object):
         tf.compat.v1.add_to_collection('hrs', y_flat)
         tf.compat.v1.add_to_collection('hrs', p_flat)
 
-        x_flat = tf.reshape(X, [-1])
-
-        # ttyadd: self-define loss
-        Y = tf.signal.frame(y_flat,512,256)
-        Y = tf.reshape(Y, (-1, 512, 1))
-        Y *= tf.signal.hamming_window(512)
-        X = tf.signal.frame(x_flat,512,256)
-        X = tf.reshape(X, (-1, 512, 1))
-        X *= tf.signal.hamming_window(512)
-        P = tf.signal.frame(p_flat,512,256)
-        P = tf.reshape(P, (-1, 512, 1))
-        P *= tf.signal.hamming_window(512)
-        if self.opt_params['loss_func']=='MAE':
-            loss = ops.MAE(Y, P)
-        elif self.opt_params['loss_func'] == 'MSE':
-            loss = ops.MSE(Y, P)
-        elif self.opt_params['loss_func'] == 'F':
-            loss = ops.F(Y, P)
-        elif self.opt_params['loss_func'] == 'RI':
-            loss = ops.RI(Y, P)
-        elif self.opt_params['loss_func'] == 'TF':
-            loss = ops.TF(Y, P)
-        elif self.opt_params['loss_func'] == 'RI_MAG':
-            loss = ops.RI_MAG(Y, P)
-        elif self.opt_params['loss_func'] == 'PCM':
-            loss = ops.PCM(X, Y, P)
-        elif self.opt_params['loss_func'] == 'T_PCM':
-            loss = ops.T_PCM(X, Y, P)
-        else:
-            loss = avg_sqrt_l2_loss
-
-        # track losses
-        tf.compat.v1.summary.scalar('l2_loss', loss)
-        tf.compat.v1.summary.scalar('snr', avg_snr)
-        tf.compat.v1.summary.scalar('lsd', avg_lsd)
-
-        # save losses into collection
-        tf.compat.v1.add_to_collection('losses', loss)
-        tf.compat.v1.add_to_collection('losses', avg_snr)
-        tf.compat.v1.add_to_collection('losses', avg_lsd)
-
-        return loss
+        return LOSS
 
     def get_params(self):
         return [v for v in tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.TRAINABLE_VARIABLES)
@@ -441,12 +461,6 @@ class Model(object):
         # input_shape (frames, 2048)
         Y = np.reshape(Y, (-1, 2048))
         P = np.reshape(P, (-1, 2048))
-        #y = np.array([0])
-        #p = np.array([0])
-        #marks = list()
-        #frame_num = np.shape(Y)[0]
-        #output_len = (frame_num - 1) * 1024 + 2048
-        #fft_len = (output_len / 512) * 2 + 1
         n = 0
         for y_frame, p_frame in zip(Y,P):
             if n == 0:
@@ -455,64 +469,32 @@ class Model(object):
             else:
                 y_half = y_frame[1024:]
                 p_half = p_frame[1024:]
-                '''
-                piece = (y[-1024:] == y_frame[:1024]).all()
-                if piece == False:
-                    mark = np.int(n * fft_len / frame_num)
-                    marks.append(mark - 2)
-                    marks.append(mark - 1)
-                    marks.append(mark)
-                    marks.append(mark + 1)
-                    marks.append(mark + 2)
-                    marks.append(mark + 3)
-                '''
                 y = np.r_[y, y_half]
                 p = np.r_[p, p_half]
             n += 1
-        #y = np.delete(y, marks * 1024)
-        #p = np.delete(p, marks * 1024)
         return y, p
 
     def eval_err(self, X, Y, n_batch=128):
         batch_iterator = iterate_minibatches(X, Y, n_batch, shuffle=False) #ttyadd: True-->False for wav monitor
-        l2_loss_op, l2_snr_op, l2_lsd_op= tf.compat.v1.get_collection('losses')
+        loss_op= tf.compat.v1.get_collection('losses')
         y_flat, p_flat = tf.compat.v1.get_collection('hrs')
 
-        l2_loss, l2_snr, l2_lsd, l2_pesq = 0, 0, 0, 0
-        tot_l2_loss, tot_snr, tot_lsd, tot_pesq = 0, 0, 0, 0
-        #Ys = np.empty([0, 0])
-        #Preds = np.empty([0, 0])
-        #d = []
-        #l = []
-        #i = 0
+        loss = 0
+        tot_loss = 0
+        Ys = np.empty([0, 0])
+        Preds = np.empty([0, 0])
         b = 0
         for bn, batch in enumerate(batch_iterator):
             feed_dict = self.load_batch(batch, train=False)
-            l2_loss, l2_snr, l2_lsd, Y, P = self.sess.run(
-                [l2_loss_op, l2_snr_op, l2_lsd_op, y_flat, p_flat], feed_dict=feed_dict)
-
-            tot_l2_loss += l2_loss
-            tot_snr += l2_snr
-            tot_lsd += l2_lsd
-            y, p = self.overlap_and_add_numpy(Y, P)
-            l2_pesq = pesq(y, p, 16000)[1]
-            tot_pesq += l2_pesq
-            #Ys = np.append(Ys, Y)
-            #Preds = np.append(Preds, P)
-            #if(i < 10):
-            #    i += 1
-            #    d.append(P)
-            #    l.append(Y)
+            loss, Y, P = self.sess.run(
+                [loss_op, y_flat, p_flat], feed_dict=feed_dict)
+            tot_loss += loss[0]
+            Ys = np.append(Ys, Y)
+            Preds = np.append(Preds, P)
             b = bn
-        #y, p = self.overlap_and_add_numpy(Ys,Preds)
         #l2_pesq = pesq(y, p, 16000)[1]
-        #sf.write("y_file.wav",y,16000)
-        #sf.write("p_file.wav",p,16000)
-        # calculate lsd
-        #lsd = self.compute_log_distortion(y, p)
-        #lsd = ops.lsd(Ys, Preds)
 
-        return tot_l2_loss / (b+1), tot_snr / (b+1), tot_lsd / (b+1), tot_pesq / (b+1)#lsd, l2_pesq
+        return tot_loss / (b+1), 0, 0, 0
 
     def predict(self, X):
         raise NotImplementedError()
