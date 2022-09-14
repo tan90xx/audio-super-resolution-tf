@@ -15,7 +15,8 @@ from keras.layers.advanced_activations import LeakyReLU, PReLU
 from keras.initializers import RandomNormal, Orthogonal
 
 # ttyadd:
-import soundfile as sf
+# import soundfile as sf
+# from .models_keras import Conv1D
 # ----------------------------------------------------------------------------
 # Wrong:
 # Conv1D init-->kernel_initializer
@@ -23,9 +24,18 @@ import soundfile as sf
 # Convolution1D-->Conv1D
 # stdev-->stddev
 # merge-->add
+# X shape (batch, frame, length, channels)
+# LeakyReLU(0.2)(x)-->PReLU(shared_axes=[1, 2])(x)
 # ----------------------------------------------------------------------------
 # Proposed in paper Towards Rubst Speech Super-Resolution, adopted from audiounet
-
+def _prelu(_x, name):
+  _alpha = tf.compat.v1.get_variable(name + "prelu",
+              shape = _x.get_shape()[-1],
+              dtype = _x.dtype,
+              initializer = tf.constant_initializer(0.1))
+  pos = tf.nn.relu(_x)
+  neg = _alpha * (_x - tf.abs(_x)) * 0.5
+  return pos + neg
 
 class Proposed(Model):
     """Generic tensorflow model training code"""
@@ -61,10 +71,11 @@ class Proposed(Model):
                     x = (Conv1D(filters=nf, kernel_size=fs,
                             activation=None, padding='same', kernel_initializer=Orthogonal(),
                             strides=2))(x)
-                    # if l > 0: x = BatchNormalization(mode=2)(x)
+                    #if l > 0: x = BatchNormalization(mode=2)(x)
                     # ttyadd: prelu mentioned in paper
                     #x = LeakyReLU(0.2)(x)
                     x = PReLU(shared_axes=[1, 2])(x)
+                    #x = _prelu(x,"d"+str(l))
                     print('D-Block: ', x.get_shape())
                     # ttyadd: drop mentioned in paper
                     if l%3 == 2:
@@ -76,10 +87,11 @@ class Proposed(Model):
                 x = (Conv1D(filters=n_filters[-1], kernel_size=n_filtersizes[-1],
                         activation=None, padding='same', kernel_initializer=Orthogonal(),
                         strides=2))(x)
-                x = Dropout(rate=0.2)(x)
                 # ttyadd: prelu mentioned in paper
                 #x = LeakyReLU(0.2)(x)
                 x = PReLU(shared_axes=[1, 2])(x)
+                #x = _prelu(x,"b"+str(l))
+                x = Dropout(rate=0.2)(x)
                 # ttyadd: print
                 print('B-Block: ', x.get_shape())
 
@@ -89,22 +101,23 @@ class Proposed(Model):
                     # (-1, n/2, 2f)
                     x = (Conv1D(filters=2*nf, kernel_size=fs,
                             activation=None, padding='same', kernel_initializer=Orthogonal()))(x)
-                    # ttyadd: drop condition
-                    if l % 3 == 2:
-                      x = Dropout(rate=0.2)(x)
+                    x = SubPixel1D(x, r=2)
                     # ttyadd: prelu ,mentioned in paper
                     #x = Activation('relu')(x)
                     x = PReLU(shared_axes=[1, 2])(x)
+                    #x = _prelu(x,"u"+str(l))
                     # (-1, n, f)
-                    x = SubPixel1D(x, r=2)
                     # (-1, n, 2f)
+                    # ttyadd: drop condition
+                    if l % 3 == 2:
+                      x = Dropout(rate=0.2)(x)
                     x = K.concatenate(tensors=[x, l_in], axis=2)
                     print('U-Block: ', x.get_shape())
 
             # final conv layer
             with tf.compat.v1.name_scope('lastconv'):
                 x = Conv1D(filters=2, kernel_size=11,
-                        activation=None, padding='same', kernel_initializer=RandomNormal(stddev=1e-3))(x)
+                        activation='linear', padding='same', kernel_initializer=RandomNormal(stddev=1e-3))(x)
                 x = SubPixel1D(x, r=2)
                 print(x.get_shape())
 

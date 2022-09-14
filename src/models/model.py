@@ -138,7 +138,7 @@ class Model(object):
             LOSS = avg_l2_loss
             # avg_snr = tf.reduce_mean(input_tensor=snr, axis=0)
         else:
-            ############################################################################################
+            ################################## ttyadd: for proposed model ##############################################
             # ola output[batch, length]
             x_ola = tf.signal.overlap_and_add(X, 1024)
             x_ola = tf.cast(x_ola, tf.float32)
@@ -149,14 +149,18 @@ class Model(object):
             # compute LT###############################################################################
             LT = tf.reduce_mean(input_tensor=tf.abs(p_ola - y_ola), axis=1)
             # conpute LF###############################################################################
-            X_spec = tf.signal.stft(signals=x_ola, frame_length=512, frame_step=256, fft_length=512,
+            CFA = 0.85
+            CFB = 0.60
+            FRAME = 512
+            SHIFT = 256
+            X_spec = tf.signal.stft(signals=x_ola, frame_length=FRAME, frame_step=SHIFT, fft_length=FRAME,
                                     window_fn=tf.signal.hamming_window)
             X_mag_spec = tf.abs(X_spec)
-            Y_spec = tf.signal.stft(signals=y_ola, frame_length=512, frame_step=256, fft_length=512,
+            Y_spec = tf.signal.stft(signals=y_ola, frame_length=FRAME, frame_step=SHIFT, fft_length=FRAME,
                                     window_fn=tf.signal.hamming_window)
             Y_mag_spec = tf.abs(Y_spec)
             Y_sub_spec = tf.abs(Y_spec - X_spec)
-            P_spec = tf.signal.stft(signals=p_ola, frame_length=512, frame_step=256, fft_length=512,
+            P_spec = tf.signal.stft(signals=p_ola, frame_length=FRAME, frame_step=SHIFT, fft_length=FRAME,
                                     window_fn=tf.signal.hamming_window)
             P_mag_spec = tf.abs(P_spec)
             P_sub_spec = tf.abs(P_spec - X_spec)
@@ -185,7 +189,7 @@ class Model(object):
                 avg_LRI = tf.reduce_mean(input_tensor=LRI, axis=0)
                 LOSS = avg_LRI
             elif opt_params['loss_func'] == 'TF':
-                LOSS = 0.85*avg_LT + 0.15*avg_LF
+                LOSS = CFA * avg_LT + (1-CFA) * avg_LF
             elif opt_params['loss_func'] == 'RI_MAG':
                 Y_real_spec = tf.math.real(Y_spec)
                 P_real_spec = tf.math.real(P_spec)
@@ -197,9 +201,9 @@ class Model(object):
             elif opt_params['loss_func'] == 'PCM':
                 LOSS = avg_LPCM
             else:
-                avg_LTPCM = 0.6 * avg_LT + 0.4 * avg_LPCM
+                avg_LTPCM = CFB * avg_LT + (1-CFB) * avg_LPCM
                 LOSS = avg_LTPCM
-
+            ############################################## end #########################################################
         # track losses
         tf.compat.v1.summary.scalar('loss', LOSS)
 
@@ -493,7 +497,7 @@ class Model(object):
             Preds = np.append(Preds, P)
             b = bn
         #l2_pesq = pesq(y, p, 16000)[1]
-
+        # ttyadd: apply overlap_and_add_numpy to ola and cal snr,lsd,pesq if you like
         return tot_loss / (b+1), 0, 0, 0
 
     def predict(self, X):

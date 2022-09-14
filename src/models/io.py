@@ -25,7 +25,7 @@ def check_dir(path):
     if os.path.exists(path) is False:
         os.makedirs(path)
 
-
+# ttyadd: stolen from https://github.com/deepakbaby/se_relativisticgan
 def reconstruct_wav(wavmat, stride_factor=0.5):
     """
     Reconstructs the audiofile from sliced matrix wavmat
@@ -66,19 +66,15 @@ def upsample_wav(wav, args, model):
     x_lr = decimate(x_hr, args.r)
 
 
-    # ttyadd: generate patches
-    if args.ola == 'true':#不需要好像效果更差了
+    # ttyadd: generate patches --> predict --> ola
+    if args.ola == 'true':# Mabey not, it seems like worse
         print("++++++++++++++++++++ola++++++++++++++++++++")
         d_lr = int(2048//2)
         s = int(1024//2)
         lr_patches = []
         max_i = len(x_lr) - d_lr + 1
         for i in range(0, max_i, s):
-            # keep only a fraction of all the patches
-            # u = np.random.uniform()
-            # if u > args.sam: continue
             i_lr = i
-
             lr_patch = np.array(x_lr[i_lr: i_lr + d_lr])
             lr_patches.append(lr_patch)
         lr_patches = np.array(lr_patches).flatten()
@@ -87,6 +83,7 @@ def upsample_wav(wav, args, model):
         pr_mat = x_pr.reshape((-1,1024))
         x_pr = reconstruct_wav(pr_mat, stride_factor=0.5)
         x_pr = x_pr.flatten()
+    # original method
     else:
         x_sp, P = model.predict(x_lr.reshape((1, len(x_lr), 1)))
         # print(np.shape(P))
@@ -102,13 +99,13 @@ def upsample_wav(wav, args, model):
     #sf.write(outname + '.hr.wav', x_hr, fs)
     sf.write(outname + '.pr.wav', x_pr, fs)
 
-        # save the spectrum
-        #S = get_spectrum(x_pr, n_fft=2048)
-        #save_spectrum(S, outfile=outname + '.pr.png')
-        #S = get_spectrum(x_hr, n_fft=2048)
-        #save_spectrum(S, outfile=outname + '.hr.png')
-        #S = get_spectrum(x_lr, n_fft=int(2048/args.r))
-        #save_spectrum(S, outfile=outname + '.lr.png')
+    # save the spectrum
+    #S = get_spectrum(x_pr, n_fft=2048)
+    #save_spectrum(S, outfile=outname + '.pr.png')
+    #S = get_spectrum(x_hr, n_fft=2048)
+    #save_spectrum(S, outfile=outname + '.hr.png')
+    #S = get_spectrum(x_lr, n_fft=int(2048/args.r))
+    #save_spectrum(S, outfile=outname + '.lr.png')
 
 # ----------------------------------------------------------------------------
 
