@@ -36,13 +36,27 @@ Dropout rate = 0.2, Optimization = Adam, Learning rate = 0.0003 is halved if the
 
 ### Result
 
+Qualitative Examples: [https://tan90xx.github.io/SR-display.github.io/](https://tan90xx.github.io/SR-display.github.io/)
+
 |Training Dataset       | Ratio     | *BASELINE* SNR (dB) | *BASELINE* LSD (dB)  | *METHOD* SNR (dB) | *METHOD* LSD (dB)  | Checkpoint  |
 |-----------------------|-----------|--------|--------|--------|--------|-------------|
 |*VTCK SingleSpeaker*   | r = 4     | 15.6   | 5.4    | 16.6   | 3.2    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)| 
 |*Piano*                | r = 4     | 19.7   | 2.9    | 20.4   | 2.2    | [Checkpoint](https://drive.google.com/file/d/1HhtghseazOR1bjfakcNVNRMyBDao5b3n/view?usp=sharing)|
 |*GTZAN (Genre: Blues)* | r = 4     | 13.3   | 7.8    | 13.8   | 3.8    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)|
+|*VTCK SingleSpeaker*   | r = 4     | 15.6   | 5.4    | 16.6   | 3.2    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)| 
+|*Piano*                | r = 4     | 19.7   | 2.9    | 20.4   | 2.2    | [Checkpoint](https://drive.google.com/file/d/1HhtghseazOR1bjfakcNVNRMyBDao5b3n/view?usp=sharing)|
+|*GTZAN (Genre: Blues)* | r = 4     | 13.3   | 7.8    | 13.8   | 3.8    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)|
 
-Qualitative Examples: [https://tan90xx.github.io/SR-display.github.io/](https://tan90xx.github.io/SR-display.github.io/)
+|Training Dataset       | Ratio     | *BASELINE* SNR (dB) | *BASELINE* LSD (dB)  | *METHOD* SNR (dB) | *METHOD* LSD (dB)  | Checkpoint  |
+|-----------------------|-----------|--------|--------|--------|--------|-------------|
+|*VTCK SingleSpeaker*   | r = 4     | 15.6   | 5.4    | 16.6   | 3.2    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)| 
+|*Piano*                | r = 4     | 19.7   | 2.9    | 20.4   | 2.2    | [Checkpoint](https://drive.google.com/file/d/1HhtghseazOR1bjfakcNVNRMyBDao5b3n/view?usp=sharing)|
+|*GTZAN (Genre: Blues)* | r = 4     | 13.3   | 7.8    | 13.8   | 3.8    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)|
+|*VTCK SingleSpeaker*   | r = 4     | 15.6   | 5.4    | 16.6   | 3.2    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)| 
+|*Piano*                | r = 4     | 19.7   | 2.9    | 20.4   | 2.2    | [Checkpoint](https://drive.google.com/file/d/1HhtghseazOR1bjfakcNVNRMyBDao5b3n/view?usp=sharing)|
+|*GTZAN (Genre: Blues)* | r = 4     | 13.3   | 7.8    | 13.8   | 3.8    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)|
+
+
 
 ### Note
 The code is adopted from https://github.com/kuleshov/audio-super-res, and here are some details of changes:
