@@ -5,7 +5,7 @@ import numpy as np
 import tensorflow as tf
 import pickle
 
-import librosa
+#import librosa
 from tensorflow.python.keras import backend as K
 from .dataset import DataSet
 from tqdm import tqdm
@@ -16,6 +16,9 @@ from tqdm import tqdm
 from collections import deque
 import csv
 from tensorflow.python.ops import array_ops
+import functools
+
+window_fn = functools.partial(tf.signal.hamming_window, periodic=True)
 # ----------------------------------------------------------------------------
 # Warning:
 # initialize_all_variables-->global_variables_initializer
@@ -77,7 +80,7 @@ class Model(object):
         self.logdir = log_prefix + lr_str + loss_str#'.%d' % r + g_str + b_str
         self.checkpoint_root = os.path.join(self.logdir, 'model.ckpt')
         self.csv_path = os.path.join(self.logdir, 'history.csv')
-
+    '''
     def get_power(self, x):
         S = librosa.stft(x, 2048)
         p = np.angle(S)
@@ -89,7 +92,7 @@ class Model(object):
         S2 = self.get_power(x_pr)
         lsd = np.mean(np.sqrt(np.mean((S1-S2)**2 + 1e-8, axis=1)), axis=0)
         return min(lsd, 10.)
-
+    '''
     def create_train_op(self, X, Y, alpha):
         # load params
         opt_params = self.opt_params
@@ -131,49 +134,49 @@ class Model(object):
 
         if opt_params['loss_func'] == 'L2':
             # compute l2 loss
-            sqrt_l2_loss = tf.sqrt(tf.reduce_mean(input_tensor=(P-Y)**2, axis=[1, 2]))# not + 1e-6
+            sqrt_l2_loss = tf.sqrt(tf.reduce_mean(input_tensor=(P-Y)**2 + 1e-6, axis=[1, 2]))# not + 1e-6
             # sqrn_l2_norm = tf.sqrt(tf.reduce_mean(input_tensor=Y**2, axis=[1, 2]))
             # snr = 20 * tf.math.log(sqrn_l2_norm / sqrt_l2_loss + 1e-8) / tf.math.log(10.)
-            avg_l2_loss = tf.reduce_mean(input_tensor=sqrt_l2_loss, axis=0)
-            LOSS = avg_l2_loss
+            avg_sqrt_l2_loss = tf.reduce_mean(input_tensor=sqrt_l2_loss, axis=0)
+            LOSS = avg_sqrt_l2_loss
             # avg_snr = tf.reduce_mean(input_tensor=snr, axis=0)
         else:
             ############################################################################################
             # ola output[batch, length]
             x_ola = tf.signal.overlap_and_add(X, 1024)
             x_ola = tf.cast(x_ola, tf.float32)
+            #x_ola = tf.reshape(x_ola, [-1])
+            
             y_ola = tf.signal.overlap_and_add(Y, 1024)
             y_ola = tf.cast(y_ola, tf.float32)
+            #y_ola = tf.reshape(y_ola, [-1])
+            
             p_ola = tf.signal.overlap_and_add(P, 1024)
             p_ola = tf.cast(p_ola, tf.float32)
+            #p_ola = tf.reshape(p_ola, [-1])
             # compute LT###############################################################################
-            LT = tf.reduce_mean(input_tensor=tf.abs(p_ola - y_ola), axis=1) # not + 1e-6
+            avg_LT = tf.reduce_mean(input_tensor=tf.abs(p_ola - y_ola))
             # conpute LF###############################################################################
-            X_spec = tf.signal.stft(signals=x_ola, frame_length=512, frame_step=256, fft_length=512,
-                                    window_fn=tf.signal.hamming_window)
+            X_spec = tf.signal.stft(signals=x_ola, frame_length=512, frame_step=256, fft_length=512, window_fn=window_fn)
             X_mag_spec = tf.abs(X_spec)
-            Y_spec = tf.signal.stft(signals=y_ola, frame_length=512, frame_step=256, fft_length=512,
-                                    window_fn=tf.signal.hamming_window)
+            Y_spec = tf.signal.stft(signals=y_ola, frame_length=512, frame_step=256, fft_length=512, window_fn=window_fn)
             Y_mag_spec = tf.abs(Y_spec)
             Y_sub_spec = tf.abs(Y_spec - X_spec)
-            P_spec = tf.signal.stft(signals=p_ola, frame_length=512, frame_step=256, fft_length=512,
-                                    window_fn=tf.signal.hamming_window)
+            P_spec = tf.signal.stft(signals=p_ola, frame_length=512, frame_step=256, fft_length=512, window_fn=window_fn)
             P_mag_spec = tf.abs(P_spec)
             P_sub_spec = tf.abs(P_spec - X_spec)
-            LF = tf.reduce_mean(tf.reduce_mean(input_tensor=tf.abs(P_mag_spec - Y_mag_spec), axis=2), axis=1)
+            avg_LF = tf.reduce_mean(input_tensor=tf.abs(P_mag_spec - Y_mag_spec))
             # conpute LPCM###############################################################################
-            LsubF = tf.reduce_mean(tf.reduce_mean(input_tensor=tf.abs(P_sub_spec - Y_sub_spec), axis=2), axis=1)
-
+            avg_LsubF = tf.reduce_mean(input_tensor=tf.abs(P_sub_spec - Y_sub_spec))
             # compute average at each batch
-            avg_LT = tf.reduce_mean(input_tensor=LT, axis=0)
-            avg_LF = tf.reduce_mean(input_tensor=LF, axis=0)
-            avg_LPCM = avg_LF + tf.reduce_mean(input_tensor=LsubF, axis=0)
+            #avg_LPCM = avg_LF + avg_LsubF
+            avg_LPCM = tf.reduce_mean(input_tensor=tf.abs(P_mag_spec - Y_mag_spec) + tf.abs(P_sub_spec - Y_sub_spec))
             ############################################################################################
             if opt_params['loss_func'] == 'MAE':
                 LOSS = avg_LT
             elif opt_params['loss_func'] == 'MSE':
-                LT_square = tf.reduce_mean(input_tensor=tf.abs(p_ola - y_ola)**2, axis=1)
-                LOSS = tf.reduce_mean(input_tensor=LT_square, axis=0)
+                LT_square = tf.reduce_mean(input_tensor=tf.math.square(p_ola - y_ola))
+                LOSS = LT_square
             elif opt_params['loss_func'] == 'F':
                 LOSS = avg_LF
             elif opt_params['loss_func'] == 'RI':
@@ -181,9 +184,9 @@ class Model(object):
                 P_real_spec = tf.math.real(P_spec)
                 Y_imag_spec = tf.math.imag(Y_spec)
                 P_imag_spec = tf.math.imag(P_spec)
-                LRI = tf.reduce_mean(input_tensor=tf.abs(P_real_spec-Y_real_spec)+tf.abs(P_imag_spec-Y_imag_spec), axis=1)
-                avg_LRI = tf.reduce_mean(input_tensor=LRI, axis=0)
-                LOSS = avg_LRI
+                LRI = tf.reduce_mean(input_tensor=tf.abs(P_real_spec-Y_real_spec)+tf.abs(P_imag_spec-Y_imag_spec))
+                #avg_LRI = tf.reduce_mean(input_tensor=LRI, axis=0)
+                LOSS = LRI
             elif opt_params['loss_func'] == 'TF':
                 LOSS = 0.85*avg_LT + 0.15*avg_LF
             elif opt_params['loss_func'] == 'RI_MAG':
@@ -191,9 +194,9 @@ class Model(object):
                 P_real_spec = tf.math.real(P_spec)
                 Y_imag_spec = tf.math.imag(Y_spec)
                 P_imag_spec = tf.math.imag(P_spec)
-                LRI = tf.reduce_mean(input_tensor=tf.abs(P_real_spec-Y_real_spec)+tf.abs(P_imag_spec-Y_imag_spec), axis=1)
-                avg_LRI = tf.reduce_mean(input_tensor=LRI, axis=0)
-                LOSS = avg_LF + avg_LRI
+                LOSS = tf.reduce_mean(input_tensor=tf.abs(P_mag_spec - Y_mag_spec)+tf.abs(P_real_spec-Y_real_spec)+tf.abs(P_imag_spec-Y_imag_spec))
+                #avg_LRI = tf.reduce_mean(input_tensor=LRI, axis=0)
+                #LOSS = avg_LF + avg_LRI
             elif opt_params['loss_func'] == 'PCM':
                 LOSS = avg_LPCM
             elif opt_params['loss_func'] == 'MAE_L1':
