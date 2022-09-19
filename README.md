@@ -35,7 +35,14 @@ U-Block:  (None, None, 128)
 Dropout rate = 0.2, Optimization = Adam, Learning rate = 0.0003 is halved if the loss has not improved for 3 consecutive epochs on the validation set. Early stop if the validation loss has not improved for 6 successive epochs.
 
 ### Result
-Notcomplete
+
+|Training Dataset       | Ratio     | *BASELINE* SNR (dB) | *BASELINE* LSD (dB)  | *METHOD* SNR (dB) | *METHOD* LSD (dB)  | Checkpoint  |
+|-----------------------|-----------|--------|--------|--------|--------|-------------|
+|*VTCK SingleSpeaker*   | r = 4     | 15.6   | 5.4    | 16.6   | 3.2    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)| 
+|*Piano*                | r = 4     | 19.7   | 2.9    | 20.4   | 2.2    | [Checkpoint](https://drive.google.com/file/d/1HhtghseazOR1bjfakcNVNRMyBDao5b3n/view?usp=sharing)|
+|*GTZAN (Genre: Blues)* | r = 4     | 13.3   | 7.8    | 13.8   | 3.8    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)|
+
+Qualitative Examples: [https://tan90xx.github.io/SR-display.github.io/](https://tan90xx.github.io/SR-display.github.io/)
 
 ### Note
 The code is adopted from https://github.com/kuleshov/audio-super-res, and here are some details of changes:
@@ -127,8 +134,8 @@ X_spec = tf.signal.stft(signals=x_ola, frame_length=FRAME, frame_step=SHIFT, fft
                         window_fn=tf.signal.hamming_window)
 ``` 
 
-- (8)Apply OLA(overlap and add). 
-Also pay attention to the articulation of each two wav files, which is not continuous. Some frames between them have been discarded to avoid vertical stripes in spectrogram. This easy numpy version can be put to calculate LSD and PESQ.
+<!-- - (8)Apply OLA(overlap and add). 
+Also pay attention to the articulation of each two wav files, which is not continuous. Some frames between them have been discarded to avoid vertical stripes in spectrogram. This easy numpy version can be put to calculate LSD and PESQ. -->
 
 Fig1.Flat
 <center>
@@ -142,15 +149,15 @@ Fig2.OLA
     box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
     src="https://user-images.githubusercontent.com/44235744/189385109-af53b752-b293-4a30-b8ce-6a9e9a2e37ab.png">
 </center>
-Fig3.Discard
+<!--Fig3.Discard
 <center>
     <img style="border-radius: 0.3125em;
     box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
     src="https://user-images.githubusercontent.com/44235744/189385130-7ba1448b-e704-4c61-a24d-3753e7736bec.png">
-</center>
+</center> -->
 
-- (9)Apply dequeue to monitor val_loss and achieve early stopping ect.
-- (10)Write the logdir and csv records in the same path for quick check.
+- (8)Apply dequeue to monitor val_loss and achieve early stopping ect.
+- (9)Write the logdir and csv records in the same path for quick check.
 
 Slight changes in script , which works as follows.
 
@@ -197,10 +204,10 @@ if args.model == 'proposed':
 ``` 
 
 #### Testing the model
-- (11)Design the output path of eval files same with logdir and csv. 
-- (12)Auto-calculate metrics.
-- (13)Define visualization functions to display Spectrogram and Training process
-- (14)Build a web page [[code]](https://github.com/tan90xx/tan90xx.github.io/tree/main/SR-display.github.io).
+- (10)Design the output path of eval files same with logdir and csv. 
+- (11)Auto-calculate metrics.
+- (12)Define visualization functions to display Spectrogram and Training process
+- (13)Build a web page [[code]](https://github.com/tan90xx/tan90xx.github.io/tree/main/SR-display.github.io).
 
 Slight changes in script , which works as follows.
 ``` 
