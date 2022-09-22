@@ -10,13 +10,10 @@ from tensorflow.python.keras import backend as K
 from keras.layers import add
 from keras.layers.core import Activation, Dropout
 from keras.layers import Conv1D
-from keras.layers.normalization.batch_normalization_v1 import BatchNormalization
+from keras.layers.normalization import BatchNormalization
 from keras.layers.advanced_activations import LeakyReLU, PReLU
-from keras.initializers import RandomNormal, Orthogonal
+from keras.initializers import RandomNormal, Orthogonal, Constant
 
-# ttyadd:
-# import soundfile as sf
-# from .models_keras import Conv1D
 # ----------------------------------------------------------------------------
 # Wrong:
 # Conv1D init-->kernel_initializer
@@ -24,18 +21,7 @@ from keras.initializers import RandomNormal, Orthogonal
 # Convolution1D-->Conv1D
 # stdev-->stddev
 # merge-->add
-# X shape (batch, frame, length, channels)
-# LeakyReLU(0.2)(x)-->PReLU(shared_axes=[1, 2])(x)
-# ----------------------------------------------------------------------------
-# Proposed in paper Towards Rubst Speech Super-Resolution, adopted from audiounet
-def _prelu(_x, name):
-  _alpha = tf.compat.v1.get_variable(name + "prelu",
-              shape = _x.get_shape()[-1],
-              dtype = _x.dtype,
-              initializer = tf.constant_initializer(0.1))
-  pos = tf.nn.relu(_x)
-  neg = _alpha * (_x - tf.abs(_x)) * 0.5
-  return pos + neg
+# x = PReLU(alpha_initializer=Constant(value=0.2),shared_axes=[1, 2])(x)-->Conv1d
 
 class Proposed(Model):
     """Generic tensorflow model training code"""
@@ -58,9 +44,8 @@ class Proposed(Model):
             # dim/layer: 4096, 2048, 1024, 512, 256, 128,  64,  32,
             #n_filters = [128, 384, 512, 512, 512, 512, 512, 512]
             #n_filtersizes = [65, 33, 17,  9,  9,  9,  9, 9, 9]
-            # ttyadd: parameters mentioned in paper
             n_filters = [64, 64, 64, 128, 128, 128, 256, 256]
-            n_filtersizes = [11, 11, 11, 11, 11, 11, 11, 11, 11]
+            n_filtersizes = [11, 11, 11, 11, 11, 11, 11, 11, 11, 11]
             downsampling_l = []
 
             print('building model...')
@@ -69,30 +54,25 @@ class Proposed(Model):
             for l, nf, fs in zip(list(range(L)), n_filters, n_filtersizes):
                 with tf.compat.v1.name_scope('downsc_conv%d' % l):
                     x = (Conv1D(filters=nf, kernel_size=fs,
-                            activation=None, padding='same', kernel_initializer=Orthogonal(),
+                            activation=PReLU(alpha_initializer=Constant(value=0.2),shared_axes=[1, 2]),
+                            padding='same', kernel_initializer=Orthogonal(),
                             strides=2))(x)
-                    #if l > 0: x = BatchNormalization(mode=2)(x)
-                    # ttyadd: prelu mentioned in paper
-                    #x = LeakyReLU(0.2)(x)
-                    x = PReLU(shared_axes=[1, 2])(x)
-                    #x = _prelu(x,"d"+str(l))
-                    print('D-Block: ', x.get_shape())
-                    # ttyadd: drop mentioned in paper
+                    #################################
                     if l%3 == 2:
-                      x = Dropout(rate=0.2)(x)
+                        x = Dropout(rate=0.2)(x)
+                        print('Dropout')
+                    print('D-Block: ', x.get_shape())
                     downsampling_l.append(x)
 
             # bottleneck layer
             with tf.compat.v1.name_scope('bottleneck_conv'):
                 x = (Conv1D(filters=n_filters[-1], kernel_size=n_filtersizes[-1],
-                        activation=None, padding='same', kernel_initializer=Orthogonal(),
+                        activation=PReLU(alpha_initializer=Constant(value=0.2),shared_axes=[1, 2]),
+                        padding='same', kernel_initializer=Orthogonal(),
                         strides=2))(x)
-                # ttyadd: prelu mentioned in paper
-                #x = LeakyReLU(0.2)(x)
-                x = PReLU(shared_axes=[1, 2])(x)
-                #x = _prelu(x,"b"+str(l))
+                ################################
                 x = Dropout(rate=0.2)(x)
-                # ttyadd: print
+                print('Dropout')
                 print('B-Block: ', x.get_shape())
 
             # upsampling layers
@@ -100,32 +80,29 @@ class Proposed(Model):
                 with tf.compat.v1.name_scope('upsc_conv%d' % l):
                     # (-1, n/2, 2f)
                     x = (Conv1D(filters=2*nf, kernel_size=fs,
-                            activation=None, padding='same', kernel_initializer=Orthogonal()))(x)
-                    x = SubPixel1D(x, r=2)
-                    # ttyadd: prelu ,mentioned in paper
-                    #x = Activation('relu')(x)
-                    x = PReLU(shared_axes=[1, 2])(x)
-                    #x = _prelu(x,"u"+str(l))
+                            activation=PReLU(alpha_initializer=Constant(value=0.0),shared_axes=[1, 2]), 
+                            padding='same', kernel_initializer=Orthogonal()))(x)
                     # (-1, n, f)
+                    x = SubPixel1D(x, r=2)
                     # (-1, n, 2f)
-                    # ttyadd: drop condition
-                    if l % 3 == 2:
-                      x = Dropout(rate=0.2)(x)
+                    ###################################
+                    if l%3 == 2:
+                        x = Dropout(rate=0.2)(x)
+                        print('Dropout')
                     x = K.concatenate(tensors=[x, l_in], axis=2)
                     print('U-Block: ', x.get_shape())
 
             # final conv layer
             with tf.compat.v1.name_scope('lastconv'):
-                x = Conv1D(filters=2, kernel_size=11,
+                x = Conv1D(filters=2, kernel_size=9,
                         activation='linear', padding='same', kernel_initializer=RandomNormal(stddev=1e-3))(x)
                 x = SubPixel1D(x, r=2)
                 print(x.get_shape())
 
-            #g = merge([x, X], mode='sum')
             g = add([x,X])
 
         return g
-    # ttyadd
+
     def predict(self, X):
         print("predicting")
         assert len(X) == 1
@@ -134,7 +111,7 @@ class Proposed(Model):
         X = x_sp.reshape((1,len(x_sp),1))
         print((X.shape))
         feed_dict = self.load_batch((X,X), train=False)
-        return x_sp, self.sess.run(self.predictions, feed_dict=feed_dict)
+        return self.sess.run(self.predictions, feed_dict=feed_dict)
 
 # ----------------------------------------------------------------------------
 # helpers
