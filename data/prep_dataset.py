@@ -41,12 +41,12 @@ parser.add_argument('--stride', type=int, default=1024,
   help='stride when extracting patches')
 parser.add_argument('--interpolate', default=True,
   help='interpolate low-res patches with cubic splines')
-parser.add_argument('--low-pass', default='decimating',
+parser.add_argument('--low-pass', default='subsampling',
   help='apply low-pass filter when generating low-res patches')
 parser.add_argument('--batch-size', type=int, default=32,
   help='we produce # of patches that is a multiple of batch size')
 parser.add_argument('--sr', type=int, default=16000, help='audio sampling rate')
-parser.add_argument('--sam', type=float, default=0.1,
+parser.add_argument('--sam', type=float, default=1,
   help='subsampling factor for the data')
 
 args = parser.parse_args()
@@ -241,9 +241,7 @@ def add_data(h5_file, inputfiles, args, save_examples=False):
 # ttyadd: simple rules for uniform naming
 def create(args):
     try:
-        remark = ''
-        if args.low_pass != 'decimating':
-            remark = '-{}'.format(args.low_pass)
+        remark = '-{}'.format(args.low_pass)
         args.out = '{}{}-{}.{}.{}.{}.h5'.format(args.corpus, remark, args.state, args.scale, args.dimension, args.stride)
         args.file_list = './Corpus/{}-{}-files.txt'.format(args.corpus, args.state)
 
