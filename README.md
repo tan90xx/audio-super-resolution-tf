@@ -29,7 +29,8 @@ U-Block:  (None, None, 128)
 ```
 
 ### Dataset
-10% Corpus: TIMIT, VCTKS, VCTKM, WSJ, LIBRI, IEEE, and Mixed.
+100% Corpus: TIMIT, VCTKS, VCTKM, WSJ, LIBRI, IEEE, and Mixed.
+![image](https://user-images.githubusercontent.com/44235744/193955233-150e62ac-cfbb-43db-939d-c00f221845b9.png)
 
 ### Hyperparameter
 Dropout rate = 0.2, Optimization = Adam, Learning rate = 0.0003 is halved if the loss has not improved for 3 consecutive epochs on the validation set. Early stop if the validation loss has not improved for 6 successive epochs.
