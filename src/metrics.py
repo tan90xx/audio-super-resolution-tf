@@ -13,7 +13,7 @@ def main(corpus_path = r"D:\Audio-Kuleshov\data\Corpus",
          a = None,
          ):
     '''
-    String below are for the right dir path.
+    Strings below are for the right dir path.
     Args:
         corpus_path:    to get the ground true wav
         check_dir_path: to get the predicted wav
