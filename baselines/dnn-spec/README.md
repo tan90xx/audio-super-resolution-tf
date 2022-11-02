@@ -1,3 +1,4 @@
+> from [https://github.com/zayd/deep-audio-super-resolution](https://github.com/zayd/deep-audio-super-resolution) make it run
 # deep-audio-super-resolution
 
 Framework to train audio super-resolution neural nets on spectrogram features
