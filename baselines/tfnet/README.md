@@ -1,5 +1,6 @@
-from [https://github.com/moodoki/tfnet](https://github.com/moodoki/tfnet)
+> from [https://github.com/moodoki/tfnet](https://github.com/moodoki/tfnet)
 make it run and add predict
+
 TFNet2
 =====
 
