@@ -1,7 +1,6 @@
 # audio-super-resolution-tf2.4.1
 This is an UNOFFICIAL implementation of the audio super-resolution model proposed in 
-**H. Wang and D. Wang, "Towards Robust Speech Super-Resolution"**. 
-Notes: I am in progress of writing this code.
+**H. Wang and D. Wang, "Towards Robust Speech Super-Resolution"**. I am in progress of writing this code.
 
 ### Environment
 !pip install https://github.com/schmiph2/pysepm/archive/master.zip
@@ -42,7 +41,7 @@ Dropout rate = 0.2, Optimization = Adam, Learning rate = 0.0003 is halved if the
 Here we provide a qualitative example per Dataset. Qualitative Examples: [https://tan90xx.github.io/SR-display.github.io/](https://tan90xx.github.io/SR-display.github.io/) 
 
 
-**Table1. EXPERIMENTAL RESULTS FOR CROSS-CORPUS SR USING THE FOUR BASELINES AND PROPOSED MODEL**
+Table1. EXPERIMENTAL RESULTS FOR CROSS-CORPUS SR USING THE FOUR BASELINES AND PROPOSED MODEL**
 |                            |        | TIMIT |       |        | WSJ   |       |        | LIBRI |       |        | IEEE  |       |
 |:--------------------------:|:------:|:-----:|:-----:|:------:|:-----:|:-----:|:------:|:-----:|:-----:|:------:|:-----:|:-----:|
 | **Model/Training Dataset** | SNR    | LSD   | PESQ  | SNR    | LSD   | PESQ  | SNR    | LSD   | PESQ  | SNR    | LSD   | PESQ  |
@@ -69,7 +68,7 @@ Here we provide a qualitative example per Dataset. Qualitative Examples: [https:
 | **Proposed/IEEE**          | 18.29  | 1.50  | 2.54  | -5.97  | 1.70  | 1.11  | 17.11  | 1.32  | 2.27  | 1.47   | 1.46  | 1.27  |
 | **Proposed/Mixed**         |        |       |       |        |       |       |        |       |       |        |       |       |
 
-**Table2. COMPARISON OF VARIOUS LOSS FUNCTIONS ON THE TIMIT DATASET**
+Table2. COMPARISON OF VARIOUS LOSS FUNCTIONS ON THE TIMIT DATASET**
 | **LOSS**   | SNR    | LSD   | PESQ  |
 |:----------:|:------:|:-----:|:-----:|
 | **MAE**    | 18.48  | 1.70  | 3.33  |
@@ -81,7 +80,7 @@ Here we provide a qualitative example per Dataset. Qualitative Examples: [https:
 | **PCM**    | 18.41  | 1.48  | 2.77  |
 | **T-PCM**  | 18.58  | 1.64  | 3.82  |
 
-**Table3. MODEL TRAINED ON ORIGINAL TIMIT UTTERANCES TESTED ON DATA CONVOLVED WITH DIFFERENT MIRs**
+Table3. MODEL TRAINED ON ORIGINAL TIMIT UTTERANCES TESTED ON DATA CONVOLVED WITH DIFFERENT MIRs**
 | **Modle**              | SNR     | LSD     | PESQ     |
 |:----------------------:|:-------:|:-------:|:--------:|
 | **Spline**             | 18.27   | 2.07    | 3.51     |
@@ -90,7 +89,7 @@ Here we provide a qualitative example per Dataset. Qualitative Examples: [https:
 | **Test on MIR2**       | 14.53   | 1.51    | 3.71     |
 | **Average of 20 MIRs** | 15.33   | 1.58    | 3.70     |
 
-**Table4. EXPERIMENTAL RESULTS FOR SR MODELS EVALUATED ON VCTK WITH DOWNSAMPLING FACTOR FOR 2 AND 4**
+Table4. EXPERIMENTAL RESULTS FOR SR MODELS EVALUATED ON VCTK WITH DOWNSAMPLING FACTOR FOR 2 AND 4**
 |                  |       |        | **VCTKS** |   |  **VCTKM**  |  |       |
 |:----------------:|:-----:|:------:|:-----:|:-----:|:------:|:-----:|:-----:|
 | **Model**        | R     | SNR    | LSD   | PESQ  | SNR    | LSD   | PESQ  |
@@ -107,7 +106,7 @@ Here we provide a qualitative example per Dataset. Qualitative Examples: [https:
 | **TFNet**        | 4.00  | -5.76  | 2.34  | 1.05  | -4.41  | 2.41  | 1.05  |
 | **Proposed**     | 4.00  | 15.43  | 2.12  | 2.62  | 20.30  | 2.12  | 3.41  |
 
-### Note
+### Changelog
 The code is adopted from https://github.com/kuleshov/audio-super-res, and here are some details of changes:
 #### Setup
 - (1)Set the random seeds and generate txts for train, valid, and test with the path of audio files for each corpus, to repeat this experiments exactly as much as possible.
