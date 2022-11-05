@@ -308,4 +308,4 @@ python run.py eval \
   --model audiotfilm
 ``` 
 ### ACKNOWLEDGMENT
-We thank the author Heming Wang for the discussion on the dimension of DFT and science filter.
+We thank the author Heming Wang for the discussion on the dimensions of DFT and the silence filter.
