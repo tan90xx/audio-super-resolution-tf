@@ -1,7 +1,6 @@
 # audio-super-resolution-tf2.4.1
 This is an UNOFFICIAL implementation of the audio super-resolution model proposed in 
-**H. Wang and D. Wang, "Towards Robust Speech Super-Resolution"** 
-with no baselines, only the proposed model. I am in progress of writing this code.
+**H. Wang and D. Wang, "Towards Robust Speech Super-Resolution"**. I am in progress of writing this code.
 
 ### Environment
 !pip install https://github.com/schmiph2/pysepm/archive/master.zip
@@ -41,21 +40,21 @@ Qualitative Examples: [https://tan90xx.github.io/SR-display.github.io/](https://
 
 |Training Dataset       | Ratio     | *BASELINE* SNR (dB) | *BASELINE* LSD (dB)  | *METHOD* SNR (dB) | *METHOD* LSD (dB)  | Checkpoint  |
 |-----------------------|-----------|--------|--------|--------|--------|-------------|
-|*VTCK SingleSpeaker*   | r = 4     | 15.6   | 5.4    | 16.6   | 3.2    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)| 
-|*Piano*                | r = 4     | 19.7   | 2.9    | 20.4   | 2.2    | [Checkpoint](https://drive.google.com/file/d/1HhtghseazOR1bjfakcNVNRMyBDao5b3n/view?usp=sharing)|
-|*GTZAN (Genre: Blues)* | r = 4     | 13.3   | 7.8    | 13.8   | 3.8    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)|
-|*VTCK SingleSpeaker*   | r = 4     | 15.6   | 5.4    | 16.6   | 3.2    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)| 
-|*Piano*                | r = 4     | 19.7   | 2.9    | 20.4   | 2.2    | [Checkpoint](https://drive.google.com/file/d/1HhtghseazOR1bjfakcNVNRMyBDao5b3n/view?usp=sharing)|
-|*GTZAN (Genre: Blues)* | r = 4     | 13.3   | 7.8    | 13.8   | 3.8    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)|
+|*VTCK SingleSpeaker*   | r = 4     | -   | 5.4    | 16.6   | 3.2    | [Checkpoint](https://)| 
+|*Piano*                | r = 4     | -   | 2.9    | 20.4   | 2.2    | [Checkpoint](https://)|
+|*GTZAN (Genre: Blues)* | r = 4     | -   | 7.8    | 13.8   | 3.8    | [Checkpoint](https://)|
+|*VTCK SingleSpeaker*   | r = 4     | -   | 5.4    | 16.6   | 3.2    | [Checkpoint](https://)| 
+|*Piano*                | r = 4     | -   | -    | 20.4   | -    | [Checkpoint](https://)|
+|*GTZAN (Genre: Blues)* | r = 4     | -   | -    | -   | -    | [Checkpoint](https://)|
 
 |Training Dataset       | Ratio     | *BASELINE* SNR (dB) | *BASELINE* LSD (dB)  | *METHOD* SNR (dB) | *METHOD* LSD (dB)  | Checkpoint  |
 |-----------------------|-----------|--------|--------|--------|--------|-------------|
-|*VTCK SingleSpeaker*   | r = 4     | 15.6   | 5.4    | 16.6   | 3.2    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)| 
-|*Piano*                | r = 4     | 19.7   | 2.9    | 20.4   | 2.2    | [Checkpoint](https://drive.google.com/file/d/1HhtghseazOR1bjfakcNVNRMyBDao5b3n/view?usp=sharing)|
-|*GTZAN (Genre: Blues)* | r = 4     | 13.3   | 7.8    | 13.8   | 3.8    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)|
-|*VTCK SingleSpeaker*   | r = 4     | 15.6   | 5.4    | 16.6   | 3.2    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)| 
-|*Piano*                | r = 4     | 19.7   | 2.9    | 20.4   | 2.2    | [Checkpoint](https://drive.google.com/file/d/1HhtghseazOR1bjfakcNVNRMyBDao5b3n/view?usp=sharing)|
-|*GTZAN (Genre: Blues)* | r = 4     | 13.3   | 7.8    | 13.8   | 3.8    | [Checkpoint](https://drive.google.com/file/d/1Ezj0LeLP_9bAXKruHJcvpg11eXQkZO6X/view?usp=sharing)|
+|*VTCK SingleSpeaker*   | r = 4     | -   | -    | 16.6   | 3.2    | [Checkpoint](https://)| 
+|*Piano*                | r = 4     | -   | -    | 20.4   | 2.2    | [Checkpoint](https://)|
+|*GTZAN (Genre: Blues)* | r = 4     | -   | -   | 13.8   | 3.8    | [Checkpoint](https://)|
+|*VTCK SingleSpeaker*   | r = 4     | -   | -    | 16.6   | 3.2    | [Checkpoint](https://)| 
+|*Piano*                | r = 4     | -   | -   | 20.4   | 2.2    | [Checkpoint](https://)|
+|*GTZAN (Genre: Blues)* | r = 4     | -   | -   | 13.8   | 3.8    | [Checkpoint](https://)|
 
 
 
@@ -245,3 +244,5 @@ python run.py eval \
   --strides 2 \
   --model audiotfilm
 ``` 
+### ACKNOWLEDGMENT
+Thank the author Heming Wang for the discussion on the dimension of DFT and science filter.
