@@ -111,6 +111,8 @@ T4. EXPERIMENTAL RESULTS FOR SR MODELS EVALUATED ON VCTK WITH DOWNSAMPLING FACTO
 | **Proposed**     | 4.00  | 15.43  | 2.12  | 2.62  | 20.30  | 2.12  | 3.41  |
 
 </div>
+
+
 ### Changelog
 The code is adopted from https://github.com/kuleshov/audio-super-res, and here are some details of changes:
 #### Setup
