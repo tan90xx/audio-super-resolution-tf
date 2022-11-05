@@ -1,0 +1,5 @@
+.\IEEE\wideband\S_01_02.wav.pr.wav
+.\LIBRI\test-clean\61\70968\61-70968-0000.wav.pr.wav
+.\TIMIT\TEST\DR1\FAKS0\SX313.WAV.wav.pr.wav
+.\WSJ\01f\01fa010a.wav.pr.wav
+.\VCTK\wav48\p226\p226_023.wav.pr.wav
