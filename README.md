@@ -40,6 +40,7 @@ Dropout rate = 0.2, Optimization = Adam, Learning rate = 0.0003 is halved if the
 ### Result
 Here we provide a qualitative example per Dataset. Qualitative Examples: [https://tan90xx.github.io/SR-display.github.io/](https://tan90xx.github.io/SR-display.github.io/) 
 
+<div align=center>
 
 T1. EXPERIMENTAL RESULTS FOR CROSS-CORPUS SR USING THE FOUR BASELINES AND PROPOSED MODEL
 |                            |        | TIMIT |       |        | WSJ   |       |        | LIBRI |       |        | IEEE  |       |
@@ -68,6 +69,7 @@ T1. EXPERIMENTAL RESULTS FOR CROSS-CORPUS SR USING THE FOUR BASELINES AND PROPOS
 | **Proposed/IEEE**          | 18.29  | 1.50  | 2.54  | -5.97  | 1.70  | 1.11  | 17.11  | 1.32  | 2.27  | 1.47   | 1.46  | 1.27  |
 | **Proposed/Mixed**         |        |       |       |        |       |       |        |       |       |        |       |       |
 
+
 T2. COMPARISON OF VARIOUS LOSS FUNCTIONS ON THE TIMIT DATASET
 | **LOSS**   | SNR    | LSD   | PESQ  |
 |:----------:|:------:|:-----:|:-----:|
@@ -80,6 +82,7 @@ T2. COMPARISON OF VARIOUS LOSS FUNCTIONS ON THE TIMIT DATASET
 | **PCM**    | 18.41  | 1.48  | 2.77  |
 | **T-PCM**  | 18.58  | 1.64  | 3.82  |
 
+
 T3. MODEL TRAINED ON ORIGINAL TIMIT UTTERANCES TESTED ON DATA CONVOLVED WITH DIFFERENT MIRs
 | **Modle**              | SNR     | LSD     | PESQ     |
 |:----------------------:|:-------:|:-------:|:--------:|
@@ -88,6 +91,7 @@ T3. MODEL TRAINED ON ORIGINAL TIMIT UTTERANCES TESTED ON DATA CONVOLVED WITH DIF
 | **Test on MIR1**       | 11.70   | 1.66    | 3.50     |
 | **Test on MIR2**       | 14.53   | 1.51    | 3.71     |
 | **Average of 20 MIRs** | 15.33   | 1.58    | 3.70     |
+
 
 T4. EXPERIMENTAL RESULTS FOR SR MODELS EVALUATED ON VCTK WITH DOWNSAMPLING FACTOR FOR 2 AND 4
 |                  |       |        | **VCTKS** |   |  **VCTKM**  |  |       |
@@ -106,6 +110,7 @@ T4. EXPERIMENTAL RESULTS FOR SR MODELS EVALUATED ON VCTK WITH DOWNSAMPLING FACTO
 | **TFNet**        | 4.00  | -5.76  | 2.34  | 1.05  | -4.41  | 2.41  | 1.05  |
 | **Proposed**     | 4.00  | 15.43  | 2.12  | 2.62  | 20.30  | 2.12  | 3.41  |
 
+</div>
 ### Changelog
 The code is adopted from https://github.com/kuleshov/audio-super-res, and here are some details of changes:
 #### Setup
