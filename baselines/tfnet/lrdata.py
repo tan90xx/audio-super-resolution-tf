@@ -17,7 +17,7 @@ def get_single_file_dataset(filename='./tests/audioclips/file1_d2.wav', upsample
             return data
         return np.true_divide(data, np.iinfo(data.dtype).max, dtype=np.float32)
 
-    def _load_wav(filename, trim_silence=None, gt_rate=8000,):
+    def _load_wav(filename, trim_silence=None, gt_rate=16000,):
         data, _ = librosa.load(filename, sr=gt_rate)
         if trim_silence:
             data, _ - librosa.effects.trim(data, top_db=trim_silence)
