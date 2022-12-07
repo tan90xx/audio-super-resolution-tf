@@ -30,9 +30,9 @@ U-Block:  (None, None, 128)
 
 ### Dataset
 Balanced Corpus:
-100% VCTKS,
-10% TIMIT, IEEE,
-2% VCTKM, WSJ, LIBRI, and Mixed.
+`100% VCTKS`
+`10% TIMIT, IEEE`
+`2% VCTKM, WSJ, LIBRI, and Mixed`
 ![image](https://user-images.githubusercontent.com/44235744/193955233-150e62ac-cfbb-43db-939d-c00f221845b9.png)
 
 ### Hyperparameter
@@ -102,13 +102,13 @@ T4. EXPERIMENTAL RESULTS FOR SR MODELS EVALUATED ON VCTK WITH DOWNSAMPLING FACTO
 | **DNN-BWE**      | 2.00  | 19.12  | 1.49  | 2.07  | 17.48  | 2.23  | 1.79  |
 | **DNN-Cepstral** | 2.00  | 18.59  | 0.89  | 3.08  | 19.62  | 1.45  | 2.69  |
 | **AudioUNet**    | 2.00  | 20.21  | 1.52  | 2.79  | 22.54  | 1.77  | 3.85  |
-| **TFNet**        | 2.00  | -3.13  | 2.23  | 1.03  | -2.22  | 2.59  | 1.05  |
+| **TFNet**        | 2.00  | 22.00  | 1.50  | 2.41  | -2.22  | 2.59  | 1.05  |
 | **Proposed**     | 2.00  | 14.98  | 1.44  | 2.77  | 23.01  | 1.73  | 4.06  |
 | **Spline**       | 4.00  | 15.28  | 3.01  | 3.16  | 19.28  | 2.64  | 3.36  |
 | **DNN-BWE**      | 4.00  | 15.01  | 1.72  | 1.72  | 18.61  | 2.22  | 1.66  |
 | **DNN-Cepstral** | 4.00  | 15.16  | 1.36  | 2.62  | 18.28  | 1.66  | 2.30  |
 | **AudioUNet**    | 4.00  | 15.50  | 2.08  | 2.30  | 19.47  | 2.26  | 2.56  |
-| **TFNet**        | 4.00  | -5.76  | 2.34  | 1.05  | -4.41  | 2.41  | 1.05  |
+| **TFNet**        | 4.00  | 13.41  | 1.74  | 1.87  | 15.20  | 1.61  | 2.15  |
 | **Proposed**     | 4.00  | 15.43  | 2.12  | 2.62  | 20.30  | 2.12  | 3.41  |
 
 </div>
