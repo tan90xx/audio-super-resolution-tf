@@ -1,7 +1,8 @@
 # audio-super-resolution-tf2.4.1
 This is an UNOFFICIAL implementation of the audio super-resolution model proposed in 
-**H. Wang and D. Wang, "Towards Robust Speech Super-Resolution"**. I am in progress of writing this code.
+**H.M. Wang and D.L. Wang, "Towards Robust Speech Super-Resolution"**. 
 
+The code is based on https://github.com/kuleshov/audio-super-res
 ### Environment
 !pip install https://github.com/schmiph2/pysepm/archive/master.zip
 
@@ -37,8 +38,8 @@ Balanced Corpus:
 ### Hyperparameter
 Dropout rate = 0.2, Optimization = Adam, Learning rate = 0.0003 is halved if the loss has not improved for 3 consecutive epochs on the validation set. Early stop if the validation loss has not improved for 6 successive epochs.
 
-### Result
-Here we provide a qualitative example per Dataset. Qualitative Examples: [https://tan90xx.github.io/SR-display.github.io/](https://tan90xx.github.io/SR-display.github.io/) 
+### Results
+Here we provide a qualitative example of some datasets [https://tan90xx.github.io/SR-display.github.io/](https://tan90xx.github.io/SR-display.github.io/) 
 
 <div align=center>
 
@@ -59,15 +60,15 @@ T1. EXPERIMENTAL RESULTS FOR CROSS-CORPUS SR USING THE FOUR BASELINES AND PROPOS
 | **AudioUNet/WSJ**          | 18.35  | 1.92  | 3.40  | 9.90   | 2.23  | 2.72  | 20.49  | 1.76  | 3.47  | 22.19  | 1.94  | 3.74  |
 | **AudioUNet/LIBRI**        | 18.44  | 2.01  | 3.62  | 10.19  | 2.27  | 2.96  | 20.82  | 2.01  | 3.85  | 22.62  | 2.20  | 4.01  |
 | **AudioUNet/IEEE**         | 18.37  | 1.80  | 3.28  | 10.01  | 2.23  | 3.00  | 20.32  | 1.73  | 3.36  | 21.92  | 1.84  | 3.67  |
-| **TFNet/TIMIT**            | -4.46  | 2.14  | 1.07  | -4.65  | 1.72  | 1.03  | -4.14  | 2.10  | 1.04  | -4.41  | 2.33  | 1.02  |
-| **TFNet/WSJ**              | -4.55  | 2.13  | 1.09  | -8.87  | 1.83  | 1.03  | -3.83  | 1.92  | 1.04  | -4.41  | 2.33  | 1.02  |
-| **TFNet/LIBRI**            | -6.56  | 2.06  | 1.11  | 20.82  | 2.01  | 3.85  | 22.62  | 2.20  | 4.01  | -4.50  | 2.14  | 1.12  |
-| **TFNet/IEEE**             | -1.14  | 2.11  | 1.05  | -3.44  | 1.70  | 1.03  | -2.76  | 1.93  | 1.14  | -1.93  | 2.20  | 1.05  |
+| **TFNet/TIMIT**            | 17.08  | 1.18  | 2.91  | 10.18  | 1.29  | 2.38  | 14.86  | 1.30  | 2.35  | 21.04  | 1.33  | 2.71  |
+| **TFNet/WSJ**              | 15.17  | 1.18  | 2.40  | 9.27   | 1.26  | 2.27  | 15.36  | 1.28  | 2.22  | 20.31  | 1.45  | 2.09  |
+| **TFNet/LIBRI**            | 15.82  | 1.17  | 2.33  | 10.97  | 1.20  | 2.22  | 16.84  | 1.26  | 2.76  | 22.97  | 1.24  | 3.04  |
+| **TFNet/IEEE**             | 13.48  | 1.39  | 1.82  | 9.39   | 1.36  | 1.80  | 14.89  | 1.36  | 2.08  | 21.37  | 1.33  | 2.46  |
 | **Proposed/TIMIT**         | 18.58  | 1.64  | 3.82  | 10.68  | 1.91  | 3.58  | 21.33  | 1.58  | 3.76  | 23.27  | 1.70  | 4.22  |
 | **Proposed/WSJ**           | 18.48  | 1.50  | 3.02  | 10.39  | 1.68  | 2.44  | 21.00  | 1.41  | 3.36  | 17.44  | 1.53  | 2.69  |
 | **Proposed/LIBRI**         | 18.55  | 1.87  | 3.41  | 10.57  | 2.09  | 2.59  | 21.31  | 1.83  | 3.79  | 23.22  | 1.98  | 3.82  |
 | **Proposed/IEEE**          | 18.29  | 1.50  | 2.54  | -5.97  | 1.70  | 1.11  | 17.11  | 1.32  | 2.27  | 1.47   | 1.46  | 1.27  |
-| **Proposed/Mixed**         |        |       |       |        |       |       |        |       |       |        |       |       |
+| **Proposed/Mixed**         | 18.48  | 1.74  | 3.21  | 5.64   | 1.94  | 1.41  | 21.29  | 1.69  | 3.63  | 23.09  | 1.84  | 3.68  |
 
 
 T2. COMPARISON OF VARIOUS LOSS FUNCTIONS ON THE TIMIT DATASET
