@@ -1,0 +1,14 @@
+{
+    "source_name": "VCTK-Corpus",
+    "source_txt_file": "vctk-p225-val.txt",
+    "degrade_function": "downsample",
+    "degrade_params": 2,
+    "groundtruth_sample_rate": 16000,
+    "sequence_length": 8192,
+    "silence_thresh": 60.0,
+    "description": null,
+    "dataset_identifier": "vctk-p225-val-16000-downsample-2",
+    "tfrecord_files": [
+        "vctk-p225-val-16000-downsample-2.tfrecord"
+    ]
+}

@@ -1,0 +1,14 @@
+{
+     "1": {"corpus": "timit", "low_pass": "subsampling"},
+     "2": {"corpus": "timit", "low_pass": "decimating"},
+     "3": {"corpus": "timit", "low_pass": "fft"},
+     "4": {"corpus": "timit", "low_pass": "random"},
+     "5": {"corpus": "wsj", "low_pass": "subsampling"},
+     "6": {"corpus": "libri", "low_pass": "subsampling"},
+     "7": {"corpus": "ieee", "low_pass": "subsampling"},
+     "8": {"corpus": "mixed", "low_pass": "subsampling"},
+     "9": {"corpus": "vctk-speaker1","scale": 2},
+     "10": {"corpus": "vctk-speaker1","scale": 4},
+     "11": {"corpus": "vctk-multispeaker","scale": 2},
+     "12": {"corpus": "vctk-multispeaker","scale": 4}
+}
