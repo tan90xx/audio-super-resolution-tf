@@ -315,4 +315,4 @@ I would like to thank the author Heming Wang who have been kind enough to answer
 [zayd/deep-audio-super-resolution](https://github.com/zayd/deep-audio-super-resolution) - for DNN baseline<br>
 [https://github.com/moodoki/tfnet](https://github.com/moodoki/tfnet) - for TFNet baseline
 
-Individual items may not be added in time. If you find out, please let me know. Hope to understand
+Individual items may not be added in time. If you find out, please let me know. Hope to understand.
