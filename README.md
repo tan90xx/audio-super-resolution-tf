@@ -3,7 +3,7 @@
 This is an UNOFFICIAL implementation of the audio super-resolution model proposed in 
 **H.M. Wang and D.L. Wang, "Towards Robust Speech Super-Resolution"**. 
 
-The code is based on https://github.com/kuleshov/audio-super-res
+The code is based heavily on https://github.com/kuleshov/audio-super-res
 ### Environment
 !pip install https://github.com/schmiph2/pysepm/archive/master.zip
 
